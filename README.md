@@ -29,8 +29,11 @@ If you use or discuss `llama3.np` in your academic research, please cite the pro
 }
 ```
 
-## References
+# References
 
 - [llama2.c](https://github.com/karpathy/llama2.c)
 - [llama.np](https://github.com/hscspring/llama.np)
 - [transformers/src/transformers/models/llama/modeling_llama.py](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py)
+
+# License
+MIT
