@@ -31,10 +31,10 @@ If you use or discuss `llama3.np` in your academic research, please cite the pro
 ```
 
 # References
-Thank you to to the creators of the following libraries and tools and their contributors:
+Thank you to the creators of the following libraries and tools and their contributors:
 - [llama2.c](https://github.com/karpathy/llama2.c) - @karpathy
 - [llama.np](https://github.com/hscspring/llama.np) - @hscspring
-- [modeling_llama.py](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py)
+- [modeling_llama.py](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py) - Hugging Face's Transformer
 
 I got a lot of information from the articles below:
 - [Exploring and building the LLaMA 3 Architecture : A Deep Dive into Components, Coding, and Inference Techniques](https://medium.com/@vi.ai_/exploring-and-building-the-llama-3-architecture-a-deep-dive-into-components-coding-and-43d4097cfbbb)
