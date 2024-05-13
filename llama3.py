@@ -32,10 +32,8 @@ def silu(x):
     return x * (1 / (1 + np.exp(-x)))
 
 
-def apply_rotary_emb(
-        xq: Array["B, L or 1, QHN,  HD"], xk: Array["B, L or 1, KVHN, HD"],
-        freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"]
-):
+def apply_rotary_emb(xq: Array["B, L or 1, QHN,  HD"], xk: Array["B, L or 1, KVHN, HD"],
+                     freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"]):
     xqri: Array["B, L or 1, QHN,  HD//2, 2"] = xq.reshape(xq.shape[:-1] + (-1, 2))
     xkri: Array["B, L or 1, KVHN, HD//2, 2"] = xk.reshape(xk.shape[:-1] + (-1, 2))
 
@@ -104,11 +102,8 @@ class RMSNorm:
 
 
 class Attention:
-    def __init__(
-            self,
-            q_weight: Array["D, D"], k_weight: Array["D, D"], v_weight: Array["D, D"], o_weight: Array["D, D"],
-            args: ModelArgs
-    ):
+    def __init__(self, q_weight: Array["D, D"], k_weight: Array["D, D"], v_weight: Array["D, D"],
+                 o_weight: Array["D, D"], args: ModelArgs):
         self.n_kv_heads = args.n_heads if args.n_kv_heads is None else args.n_kv_heads
         assert args.n_heads % self.n_kv_heads == 0
         self.n_local_heads = args.n_heads
@@ -121,18 +116,11 @@ class Attention:
         self.v_weight = v_weight.T
         self.o_weight = o_weight.T
 
-        self.cache_k = np.zeros(
-            (args.max_batch_size, args.max_seq_len, self.n_local_kv_heads, self.head_dim)
-        )
-        self.cache_v = np.zeros(
-            (args.max_batch_size, args.max_seq_len, self.n_local_kv_heads, self.head_dim)
-        )
+        self.cache_k = np.zeros((args.max_batch_size, args.max_seq_len, self.n_local_kv_heads, self.head_dim))
+        self.cache_v = np.zeros((args.max_batch_size, args.max_seq_len, self.n_local_kv_heads, self.head_dim))
 
-    def __call__(
-            self,
-            x: Array["B, L or 1, D"], start_pos: int, mask: Optional[Array["L, L"]],
-            freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"],
-    ):
+    def __call__(self, x: Array["B, L or 1, D"], start_pos: int, mask: Optional[Array["L, L"]],
+                 freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"]):
         B, L, _ = x.shape
 
         # QKV
@@ -201,11 +189,8 @@ class TransformerBlock:
             eps=args.norm_eps
         )
 
-    def __call__(
-            self,
-            x: Array["B, L or 1, D"], start_pos: int, mask: Array["L, L"],
-            freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"],
-    ):
+    def __call__(self, x: Array["B, L or 1, D"], start_pos: int, mask: Array["L, L"],
+                 freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"]):
         # RMSNorm
         norm_x: Array["B, L or 1, D"] = self.input_layernorm(x)
         # Masked Multi-Head Attention
