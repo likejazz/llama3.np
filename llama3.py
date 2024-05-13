@@ -252,13 +252,16 @@ class Llama:
         return logit
 
     def generate(self, input_ids: Array["B, L"], max_new_tokens: int):
-        prev_pos = 0
-        next_id = None
         _, L = input_ids.shape
-        for curr_pos in range(L, max_new_tokens):
-            logits: Array["B, 1, VS"] = self(input_ids if next_id is None else next_id, prev_pos)
+        for i, curr_pos in enumerate(range(L, max_new_tokens)):
+            if i == 0:  # Prefill Phase
+                inputs = input_ids
+                pos = 0
+            else:  # Decode Phase
+                inputs = next_id
+                pos = curr_pos
+            logits: Array["B, 1, VS"] = self(inputs, pos)
             next_id = logits[:, -1, :].argmax(-1, keepdims=True)
-            prev_pos = curr_pos
             yield next_id
 
 
