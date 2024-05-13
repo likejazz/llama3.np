@@ -22,12 +22,11 @@ If you use or discuss `llama3.np` in your academic research, please cite the pro
 
 ```
 @misc{llama3.np,
-  author = {Sang Park}, 
   title = {Inference Llama 3 in single file of pure NumPy},
-  year = {2024},
-  month = {05},
+  author = {Sang Park}, 
   howpublished = {\url{https://github.com/likejazz/llama3.np}},
-  note = {Llama3.np, Apache License}
+  note = {llama3.np, MIT License}
+  year = {2024},
 }
 ```
 
