@@ -1,6 +1,6 @@
 # llama3.np
 
-llama3.np is pure NumPy implementation for Llama 3 model.
+`llama3.np` is pure NumPy implementation for Llama 3 model.
 
 한글로 설명한 상세한 내용은 [NumPy로 구현하는 라마 3 모델](https://docs.likejazz.com/llama3/)을 참고하세요.
 
