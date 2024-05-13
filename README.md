@@ -22,7 +22,7 @@ If you use or discuss `llama3.np` in your academic research, please cite the pro
 
 ```
 @misc{llama3.np,
-  title = {llama3.np is pure NumPy implementation for Llama 3 model},
+  title = {llama3.np: pure NumPy implementation for Llama 3 model},
   author = {Sang Park}, 
   howpublished = {\url{https://github.com/likejazz/llama3.np}},
   note = {llama3.np, MIT License}
