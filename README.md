@@ -36,6 +36,8 @@ If you use or discuss `llama3.np` in your academic research, please cite the pro
 - [llama2.c](https://github.com/karpathy/llama2.c)
 - [llama.np](https://github.com/hscspring/llama.np)
 - [transformers/src/transformers/models/llama/modeling_llama.py](https://github.com/huggingface/transformers/blob/main/src/transformers/models/llama/modeling_llama.py)
+- [Exploring and building the LLaMA 3 Architecture : A Deep Dive into Components, Coding, and Inference Techniques](https://medium.com/@vi.ai_/exploring-and-building-the-llama-3-architecture-a-deep-dive-into-components-coding-and-43d4097cfbbb)
+- [Rotary Embeddings: A Relative Revolution](https://blog.eleuther.ai/rotary-embeddings/)
 
 # License
 MIT
