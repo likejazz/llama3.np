@@ -268,11 +268,8 @@ class Llama:
 if __name__ == '__main__':
     args = ModelArgs()
 
-    token_model_path = "./tokenizer.model.np"
-    model_path = "./stories15M.model.npz"
-
-    tokenizer = Tokenizer(token_model_path)
-    model = Llama(model_path, args)
+    tokenizer = Tokenizer("./tokenizer.model.np")
+    model = Llama("./stories15M.model.npz", args)
 
     if len(sys.argv) == 1:
         prompt = "I have a dream"
