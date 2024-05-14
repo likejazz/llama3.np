@@ -3,7 +3,7 @@
 `llama3.np` is pure NumPy implementation for Llama 3 model.  
 For an accurate implementation, I ran the [stories15M model](https://github.com/karpathy/llama2.c?tab=readme-ov-file#models) trained by Karpathy. 
 
-한글로 설명한 상세한 내용은 [NumPy로 구현하는 라마 3 모델](https://docs.likejazz.com/llama3/)을 참고하세요.
+한글로 설명한 상세한 내용은 [NumPy로 구현하는 라마 3 모델](https://docs.likejazz.com/llama3.np/)을 참고하세요.
 
 ## Usage
 
