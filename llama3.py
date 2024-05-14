@@ -68,13 +68,6 @@ def repeat_kv(x: Array["B, L, KVHN, HD"], n_rep: int):
     return z
 
 
-def precompute_freqs_cos_sin(head_dim: int, max_seq_len: int, theta: int = 10000):
-    inv_freqs: Array["HD//2"] = (1.0 / theta ** (np.arange(0, head_dim, 2)[: (head_dim // 2)] / head_dim))
-    M: Array["M"] = np.arange(max_seq_len)
-    freqs_np: Array["M, HD//2"] = np.outer(M, inv_freqs)
-    return np.cos(freqs_np), np.sin(freqs_np)
-
-
 class FeedForward:
     def __init__(self, up_weight: Array["FD, D"], gate_weight: Array["FD, D"], down_weight: Array["D, FD"]):
         self.up_weight = up_weight.T
@@ -132,7 +125,7 @@ class Attention:
         xk: Array["B, L or 1, KVHN, HD"] = xk.reshape(B, L, self.n_local_kv_heads, self.head_dim)
         xv: Array["B, L or 1, KVHN, HD"] = xv.reshape(B, L, self.n_local_kv_heads, self.head_dim)
 
-        # RoPE
+        # RoPE #2
         xq, xk = apply_rotary_emb(xq, xk, freqs_cos, freqs_sin)
 
         # KV Cache
@@ -213,9 +206,14 @@ class Llama:
         weight = load_parameters(model_path)
         self.tok_embedding: Array["VS, D"] = weight.get("model.embed_tokens.weight")
 
-        freqs_cos, freqs_sin = precompute_freqs_cos_sin(args.dim // args.n_heads, args.max_seq_len)
-        self.freqs_cos: Array["M, HD//2"] = freqs_cos
-        self.freqs_sin: Array["M, HD//2"] = freqs_sin
+        # RoPE #1
+        base = 10000
+        head_dim = args.dim // args.n_heads
+        inv_freq: Array["HD//2"] = 1.0 / (base ** (np.arange(0, head_dim, 2)[: (head_dim // 2)] / head_dim))
+        t: Array["M"] = np.arange(args.max_seq_len)
+        freqs: Array["M, HD//2"] = np.outer(t, inv_freq)
+        self.freqs_cos: Array["M, HD//2"] = np.cos(freqs)
+        self.freqs_sin: Array["M, HD//2"] = np.sin(freqs)
 
         self.layers = []
         for layer_id in range(args.n_layers):
