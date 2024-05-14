@@ -13,7 +13,7 @@ $ python llama3.py "I have a dream"
 I have a dream. He dream of a big, beautiful garden full of flower and tree. He dream of playing with hi friend and eating yummy snack.
 One day, he wa walking in the garden when he saw
 
-Token count: 50, cost: 1.53s, 33 tokens/s
+Token count: 50, elapsed: 1.53s, 33 tokens/s
 """
 ```
 

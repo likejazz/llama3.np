@@ -272,7 +272,7 @@ if __name__ == '__main__':
     model_path = "./stories15M.model.npz"
 
     tokenizer = Tokenizer(token_model_path)
-    llama = Llama(model_path, args)
+    model = Llama(model_path, args)
 
     if len(sys.argv) == 1:
         prompt = "I have a dream"
@@ -283,7 +283,7 @@ if __name__ == '__main__':
     input_ids = np.array([tokenizer.encode(prompt)])
     start = time.time()
     _, L = input_ids.shape
-    for id in llama.generate(input_ids, args.max_new_tokens):
+    for id in model.generate(input_ids, args.max_new_tokens):
         L += 1
         output_id = id[0].tolist()
         if output_id[-1] in [tokenizer.eos_id, tokenizer.bos_id]:
@@ -291,4 +291,4 @@ if __name__ == '__main__':
         print(tokenizer.decode(output_id), end="")
         sys.stdout.flush()
     elapsed = time.time() - start
-    print(f"\n\nToken count: {L}, cost: {elapsed:.2f}s, {round(L / elapsed)} tokens/s")
+    print(f"\n\nToken count: {L}, elapsed: {elapsed:.2f}s, {round(L / elapsed)} tokens/s")
