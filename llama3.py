@@ -11,16 +11,10 @@ from config import ModelArgs
 from tokenizer import Tokenizer
 from utils import load_parameters
 
-import matplotlib.pyplot as plt
-import seaborn as sns
-
-np.set_printoptions(suppress=True)
-
 Shape = TypeVar("Shape")
 
 
-class Array(np.ndarray, Generic[Shape]):
-    ...
+class Array(np.ndarray, Generic[Shape]): ...
 
 
 def softmax(x):
