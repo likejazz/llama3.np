@@ -31,22 +31,26 @@ def apply_rotary_emb(xq: Array["B, L or 1, QHN,  HD"], xk: Array["B, L or 1, KVH
     xqri: Array["B, L or 1, QHN,  HD//2, 2"] = xq.reshape(xq.shape[:-1] + (-1, 2))
     xkri: Array["B, L or 1, KVHN, HD//2, 2"] = xk.reshape(xk.shape[:-1] + (-1, 2))
 
+    # Reshape `xq` and `xk` to match the complex representation.
     xq_r, xq_i = np.split(xqri, 2, axis=-1)
-    xk_r, xk_i = np.split(xkri, 2, axis=-1)
-
     xq_r: Array["B, L or 1, QHN,  HD//2"] = xq_r.squeeze(-1)
     xq_i: Array["B, L or 1, QHN,  HD//2"] = xq_i.squeeze(-1)
+
+    xk_r, xk_i = np.split(xkri, 2, axis=-1)
     xk_r: Array["B, L or 1, KVHN, HD//2"] = xk_r.squeeze(-1)
     xk_i: Array["B, L or 1, KVHN, HD//2"] = xk_i.squeeze(-1)
 
+    # Reshape `freqs_cos` and `freqs_sin` for broadcasting.
     freqs_cos: Array["B, L or 1, 1, HD//2"] = np.expand_dims(freqs_cos, axis=(0, 2))
     freqs_sin: Array["B, L or 1, 1, HD//2"] = np.expand_dims(freqs_sin, axis=(0, 2))
 
+    # Apply rotation using real numbers.
     xq_out_r: Array["B, L or 1, QHN,  HD//2"] = xq_r * freqs_cos - xq_i * freqs_sin
     xq_out_i: Array["B, L or 1, QHN,  HD//2"] = xq_r * freqs_sin + xq_i * freqs_cos
     xk_out_r: Array["B, L or 1, KVHN, HD//2"] = xk_r * freqs_cos - xk_i * freqs_sin
     xk_out_i: Array["B, L or 1, KVHN, HD//2"] = xk_r * freqs_sin + xk_i * freqs_cos
 
+    # Flatten last two dimensions.
     xq_out: Array["B, L or 1, QHN,  HD//2, 2"] = np.stack([xq_out_r, xq_out_i], axis=-1)
     xk_out: Array["B, L or 1, KVHN, HD//2, 2"] = np.stack([xk_out_r, xk_out_i], axis=-1)
     xq_out: Array["B, L or 1, QHN,  HD"] = xq_out.reshape(xq_out.shape[:-2] + (-1,))
@@ -132,7 +136,7 @@ class Attention:
         xk: Array["B, L, HN, HD"] = repeat_kv(ks, self.n_rep)
         xv: Array["B, L, HN, HD"] = repeat_kv(vs, self.n_rep)
 
-        # You can probably optimize it in some ways.
+        # ["B, L, HN, HD"] -> ["B, HN, L, HD"]
         xq: Array["B, HN, L or 1, HD"] = xq.transpose(0, 2, 1, 3)
         xk: Array["B, HN, L, HD"] = xk.transpose(0, 2, 1, 3)
         xv: Array["B, HN, L, HD"] = xv.transpose(0, 2, 1, 3)
