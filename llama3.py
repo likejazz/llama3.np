@@ -26,8 +26,17 @@ def silu(x):
     return x * (1 / (1 + np.exp(-x)))
 
 
+def compute_cos_sin_cache(head_dim: int, max_seq_len: int, base: int = 10000):
+    inv_freq: Array["HD//2"] = 1.0 / (base ** (np.arange(0, head_dim, 2)[: (head_dim // 2)] / head_dim))
+    t: Array["M"] = np.arange(max_seq_len)
+    freqs: Array["M, HD//2"] = np.outer(t, inv_freq)
+
+    return np.cos(freqs), np.sin(freqs)
+
+
 def apply_rotary_emb(xq: Array["B, L or 1, QHN,  HD"], xk: Array["B, L or 1, KVHN, HD"],
                      freqs_cos: Array["L or 1, HD//2"], freqs_sin: Array["L or 1, HD//2"]):
+    # ["B, L or 1, QHN, HD"] -> ["B, L or 1, QHN,  HD//2, 2"]
     xqri: Array["B, L or 1, QHN,  HD//2, 2"] = xq.reshape(xq.shape[:-1] + (-1, 2))
     xkri: Array["B, L or 1, KVHN, HD//2, 2"] = xk.reshape(xk.shape[:-1] + (-1, 2))
 
@@ -205,13 +214,7 @@ class Llama:
         self.tok_embedding: Array["VS, D"] = weight.get("model.embed_tokens.weight")
 
         # RoPE #1
-        base = 10000
-        head_dim = args.dim // args.n_heads
-        inv_freq: Array["HD//2"] = 1.0 / (base ** (np.arange(0, head_dim, 2)[: (head_dim // 2)] / head_dim))
-        t: Array["M"] = np.arange(args.max_seq_len)
-        freqs: Array["M, HD//2"] = np.outer(t, inv_freq)
-        self.freqs_cos: Array["M, HD//2"] = np.cos(freqs)
-        self.freqs_sin: Array["M, HD//2"] = np.sin(freqs)
+        self.freqs_cos, self.freqs_sin = compute_cos_sin_cache(args.dim // args.n_heads, args.max_seq_len)
 
         self.layers = []
         for layer_id in range(args.n_layers):
