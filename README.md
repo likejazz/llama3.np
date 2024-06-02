@@ -1,5 +1,9 @@
 # llama3.np
 
+<p align="center">
+  <img src="/assets/llama3.np.webp" width="300" alt="llama3.cuda">
+</p>
+
 `llama3.np` is a pure NumPy implementation for Llama 3 model. For an accurate implementation, I ran the [stories15M model](https://github.com/karpathy/llama2.c?tab=readme-ov-file#models) trained by Andrej Karpathy. 
 
 - For a detailed explanation in English, see [Llama 3 implemented in pure NumPy](https://docs.likejazz.com/llama3.np/).
